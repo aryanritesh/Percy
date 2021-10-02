@@ -3,9 +3,13 @@ import speech_recognition as sr
 import pyaudio
 import os
 import datetime
+import cv2
+from requests import get
+import wikipedia
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice',voices[2].id)
+engine.setProperty('rate',175)
 print(voices[2].id)
 def speak(audio):
  engine.say(audio)
@@ -35,7 +39,7 @@ def greet():
         speak("Good Morning sir")
     elif hour>12 and hour<=17:
         speak("Good afternoon sir")
-    elif hour>17 and hour<=8:
+    elif hour>17 and hour<=20:
         speak("Good evening sir")
     elif hour>2 and hour<=4:
         speak("Sir you should consider sleeping")
@@ -55,5 +59,33 @@ if __name__=="__main__":
         wordPath="C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.exe"
         speak("opening word")
         os.startfile(wordPath)
+    elif "open command prompt" in question:
+        speak("opening command prompt")
+        os.system("start cmd")
+    elif "open camera" in question:
+        cap=cv2.VideoCapture(0)
+        speak("opening camera")
+        while True:
+            ret,img=cap.read()
+            cv2.imshow('webcam',img)
+            k=cv2.waitKey(20)
+            if k==10:
+                break;
+        cap.release()
+        cv2.destroyAllWindows()
+    elif "ip address" in question:
+        speak("gathering information, hold on")
+        ip= get('http://api.ipify.org').text
+        speak(f"Your Ip address is {ip}")
+    elif "search for" in question:
+        speak("Looking it up..")
+        question=question.replace("search for","")
+        results = wikipedia.summary(question,sentences=2)
+        speak("According to wikipedia")
+        speak(results)
+
+
+
+
 
 
