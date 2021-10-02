@@ -1,4 +1,5 @@
 import pyttsx3
+import pywhatkit
 import speech_recognition as sr
 import pyaudio
 import os
@@ -6,10 +7,12 @@ import datetime
 import cv2
 from requests import get
 import wikipedia
+import webbrowser
+
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice',voices[2].id)
-engine.setProperty('rate',175)
+engine.setProperty('rate',170)
 print(voices[2].id)
 def speak(audio):
  engine.say(audio)
@@ -43,7 +46,7 @@ def greet():
         speak("Good evening sir")
     elif hour>2 and hour<=4:
         speak("Sir you should consider sleeping")
-    speak("I am percy, how can I help you")
+    speak("Hey I am percy, how can I help you")
 
 
 
@@ -83,6 +86,20 @@ if __name__=="__main__":
         results = wikipedia.summary(question,sentences=2)
         speak("According to wikipedia")
         speak(results)
+    elif "open youtube" in question:
+#webbrowser.open("youtube.com")
+     speak("Which video do you want me to play sir?")
+     com=takeRes().lower()
+     speak("loading...")
+     pywhatkit.playonyt(f"{com}")
+    elif "open google" in question:
+    #webbrowser.Mozilla
+     speak("What would you want me to search for sir?")
+     com=takeRes().lower()
+     #webbrowser.open(f"{com}")
+     speak("Searching..")
+     pywhatkit.search(f"{com}")
+
 
 
 
