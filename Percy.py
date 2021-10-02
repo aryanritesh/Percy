@@ -6,6 +6,7 @@ import datetime
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice',voices[2].id)
+print(voices[2].id)
 def speak(audio):
  engine.say(audio)
  print(audio)
@@ -48,9 +49,11 @@ if __name__=="__main__":
     question=takeRes().lower()
     if "open notepad" in question:
        notePath="C:\\Windows\\system32\\notepad.exe"
+       speak("opening notepad")
        os.startfile(notePath)
     elif "open word" in question:
         wordPath="C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.exe"
+        speak("opening word")
         os.startfile(wordPath)
 
 
