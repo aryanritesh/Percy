@@ -1,5 +1,7 @@
 import sys
 import ctypes
+import time
+import pyautogui
 import pyjokes
 import pyttsx3
 import pywhatkit
@@ -11,6 +13,8 @@ import cv2
 from requests import get
 import wikipedia
 import smtplib
+import geocoder
+from geopy.geocoders import Nominatim
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -41,6 +45,7 @@ def takeRes(): #voice to text
    return question
 
 def greet():
+    speak("Hey I am percy, how can I help you")
     hour =int(datetime.datetime.now().hour)
     if hour>=6 and hour<=12:
         speak("Good Morning sir")
@@ -50,7 +55,7 @@ def greet():
         speak("Good evening sir")
     elif hour>2 and hour<=4:
         speak("Sir you should consider sleeping")
-    speak("Hey I am percy, how can I help you")
+
 
 def sendEmail(to,content):
     emailAdd=os.environ.get('email_id')
@@ -112,7 +117,7 @@ if __name__=="__main__":
      #webbrowser.open(f"{com}")
      speak("Searching..")
      pywhatkit.search(f"{com}")
-    elif "email" in question:
+    elif "email" in question or "send an email" in question:
         speak("Who do you wish to send an email to sir?\n")
         email=input(speak)
         try:
@@ -138,15 +143,15 @@ if __name__=="__main__":
             os.system("TASKKILL/F /IM msedge.exe")
         elif "no" in resp:
             break;
-    elif "dismiss word" in question:
+    elif "dismiss word" in question or "close word" in question:
         speak("closing word")
         os.system("TASKKILL/F /IM WINWORD.exe")
-    elif "joke" in question:
+    elif "joke" in question or "tell me a joke" in question:
      joke=pyjokes.get_joke(language='en',category='neutral')
      speak(joke)
-    elif "shut down pc" in question:
+    elif "shut down pc" in question or "shut down the pc" in question:
         os.system("shutdown/s /t 7")
-    elif "restart pc" in question:
+    elif "restart pc" in question or "lock the screen" in question:
         os.system("shutdown/r /t 5")
     elif "lock screen" in question:
         ctypes.windll.user32.LockWorkStation()
@@ -169,8 +174,21 @@ if __name__=="__main__":
         if "no" in ans:
             speak("Okay sir")
             break;
+    elif "what is my location" in question or "where are we" in question:
+      g= geocoder.ip('me')
+      loc=g.latlng
+      geoLoc = Nominatim(user_agent="GetLoc")
+      name=geoLoc.reverse(loc)
+      speak(name.address)
+    elif "take a screenshot" in question or "screenshot" in question:
+        speak("What should I name the file sir?")
+        fileName=takeRes().lower()
+        time.sleep(3)
+        image=pyautogui.screenshot()
+        image.save(f"{fileName}.png")
 
-    elif "no" in question:
+        speak("Done sir")
+    elif "no thanks" in question:
         speak("Alright sir")
         sys.exit()
     speak("Is there anything else I can assist you with sir?")
