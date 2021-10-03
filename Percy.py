@@ -128,7 +128,7 @@ if __name__=="__main__":
     elif "no" in question:
         speak("Alright sir")
         sys.exit()
-    speak("Is there anything else I can assist you with sir?")
+    speak("Is there anything else I can assist you with sir?") #fixed
 
 
 
