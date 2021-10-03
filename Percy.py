@@ -4,7 +4,7 @@ import pyjokes
 import pyttsx3
 import pywhatkit
 import speech_recognition as sr
-import pyaudio
+import requests
 import os
 import datetime
 import cv2
@@ -150,6 +150,26 @@ if __name__=="__main__":
         os.system("shutdown/r /t 5")
     elif "lock screen" in question:
         ctypes.windll.user32.LockWorkStation()
+    elif "tell me the news" in question:
+        url='https://newsapi.org/v2/top-headlines?sources=google-news-in&apiKey=de2d387b607b43bbb059f58b15020bae'
+        speak("Here are the top 3 headlines for today")
+        page=requests.get(url).json()
+        articles=page["articles"]
+        top3=["first","second","third"]
+        header=[]
+        for ar in articles:
+            header.append(ar["title"])
+        for i in range(len(top3)):
+         speak(f"Today's {top3[i]} headline is :{header[i]}")
+        speak("Do you want me to open the detailed news on the browser sir?")
+        ans=takeRes().lower()
+        if "yes" in ans:
+            speak("opening google news..")
+            pywhatkit.search("today's news")
+        if "no" in ans:
+            speak("Okay sir")
+            break;
+
     elif "no" in question:
         speak("Alright sir")
         sys.exit()
