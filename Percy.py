@@ -150,10 +150,12 @@ if __name__=="__main__":
      joke=pyjokes.get_joke(language='en',category='neutral')
      speak(joke)
     elif "shut down pc" in question or "shut down the pc" in question:
-        os.system("shutdown/s /t 7")
-    elif "restart pc" in question or "lock the screen" in question:
-        os.system("shutdown/r /t 5")
-    elif "lock screen" in question:
+        sd="shutdown /s /t 1"
+        os.system(sd)
+    elif "restart pc" in question or "restart the pc" in question:
+        r="shutdown /r /t 1"
+        os.system(r)
+    elif "lock screen" in question or "lock the screen" in question:
         ctypes.windll.user32.LockWorkStation()
     elif "tell me the news" in question:
         url='https://newsapi.org/v2/top-headlines?sources=google-news-in&apiKey=de2d387b607b43bbb059f58b15020bae'
