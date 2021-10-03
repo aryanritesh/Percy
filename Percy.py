@@ -1,3 +1,4 @@
+import sys
 import pyttsx3
 import pywhatkit
 import speech_recognition as sr
@@ -61,7 +62,7 @@ def sendEmail(to,content):
 
 if __name__=="__main__":
  greet()
- if 1:
+ while True:
     question=takeRes().lower()
     if "open notepad" in question:
        notePath="C:\\Windows\\system32\\notepad.exe"
@@ -124,6 +125,11 @@ if __name__=="__main__":
         except Exception as e:
             print(e)
             speak("I am sorry sir, there was an error while sending the email")
+    elif "no" in question:
+        speak("Alright sir")
+        sys.exit()
+    speak("Is there anything else I can assist you with sir?")
+
 
 
 
