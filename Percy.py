@@ -7,7 +7,7 @@ import datetime
 import cv2
 from requests import get
 import wikipedia
-import webbrowser
+import smtplib
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -24,7 +24,7 @@ def takeRes(): #voice to text
   with sr.Microphone() as source :
    print("detecting")
    r.pause_threshold=1
-   audio=r.listen(source,timeout=1,phrase_time_limit=5)
+   audio=r.listen(source,timeout=2,phrase_time_limit=5)
 
    try:
      print("Recognizing..")
@@ -48,6 +48,15 @@ def greet():
         speak("Sir you should consider sleeping")
     speak("Hey I am percy, how can I help you")
 
+def sendEmail(to,content):
+    emailAdd=os.environ.get('email_id')
+    passAdd=os.environ.get('password_id')
+    server=smtplib.SMTP("smtp.gmail.com",587)
+    server.ehlo()
+    server.starttls()
+    server.login(emailAdd,passAdd)
+    server.sendmail('emailAdd',to,content)
+    server.close()
 
 
 if __name__=="__main__":
@@ -86,7 +95,7 @@ if __name__=="__main__":
         results = wikipedia.summary(question,sentences=2)
         speak("According to wikipedia")
         speak(results)
-    elif "open youtube" in question:
+    elif "youtube" in question:
 #webbrowser.open("youtube.com")
      speak("Which video do you want me to play sir?")
      com=takeRes().lower()
@@ -99,6 +108,23 @@ if __name__=="__main__":
      #webbrowser.open(f"{com}")
      speak("Searching..")
      pywhatkit.search(f"{com}")
+    elif "email" in question:
+        speak("Who do you wish to send an email to sir?\n")
+        email=input(speak)
+        try:
+            speak("What should be the subject sir?")
+            subject=takeRes().lower()
+            speak("What should be the content sir?")
+            body=takeRes().lower()
+            content=f'subject:{subject}\n\n{body}'
+            to=email
+            sendEmail(to,content)
+            speak(f"The email has been sent to {email} sir")
+
+        except Exception as e:
+            print(e)
+            speak("I am sorry sir, there was an error while sending the email")
+
 
 
 
