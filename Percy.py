@@ -33,9 +33,10 @@ def takeRes(): #voice to text
      print(f"user said: {question}")
 
    except Exception as e:
-     speak("I am sorry, Can you repeat?")
-     return "none"
-  return question
+      speak("I am sorry, Can you repeat?")
+      return takeRes()
+
+   return question
 
 def greet():
     hour =int(datetime.datetime.now().hour)
@@ -128,7 +129,7 @@ if __name__=="__main__":
     elif "no" in question:
         speak("Alright sir")
         sys.exit()
-    speak("Is there anything else I can assist you with sir?") #fixed
+    speak("Is there anything else I can assist you with sir?")
 
 
 
