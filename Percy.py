@@ -1,4 +1,6 @@
 import sys
+import ctypes
+import pyjokes
 import pyttsx3
 import pywhatkit
 import speech_recognition as sr
@@ -126,6 +128,28 @@ if __name__=="__main__":
         except Exception as e:
             print(e)
             speak("I am sorry sir, there was an error while sending the email")
+    elif "close notepad" in question:
+      speak("closing notepad..")
+      os.system("TASKKILL/F /IM notepad.exe")
+    elif "close browser" in question:
+        speak("Are you sure sir?")
+        resp=takeRes().lower()
+        if "yes" in resp:
+            os.system("TASKKILL/F /IM msedge.exe")
+        elif "no" in resp:
+            break;
+    elif "dismiss word" in question:
+        speak("closing word")
+        os.system("TASKKILL/F /IM WINWORD.exe")
+    elif "joke" in question:
+     joke=pyjokes.get_joke(language='en',category='neutral')
+     speak(joke)
+    elif "shut down pc" in question:
+        os.system("shutdown/s /t 7")
+    elif "restart pc" in question:
+        os.system("shutdown/r /t 5")
+    elif "lock screen" in question:
+        ctypes.windll.user32.LockWorkStation()
     elif "no" in question:
         speak("Alright sir")
         sys.exit()
