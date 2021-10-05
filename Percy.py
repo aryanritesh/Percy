@@ -180,8 +180,8 @@ class mainT(QThread):
         elif "joke" in self.question or "tell me a joke" in self.question:
          joke=pyjokes.get_joke(language='en',category='neutral')
          speak(joke)
-        elif "shutdown pc" in self.question or "shutdown the pc" in self.question:
-            sd='shutdown -s/t 0'
+        elif "turn off pc" in self.question or "shutdown the pc" in self.question:
+            sd='shutdown /s /t1'
             os.system(sd)
         elif "restart pc" in self.question or "restart the pc" in self.question:
             r="shutdown /r /t 1"
@@ -237,7 +237,7 @@ class Main(QMainWindow):
         button.setStyleSheet("background - image: url(mic2.png);")
         self.ui.pushButton.clicked.connect(self.startTask)
     def startTask(self):
-        self.ui.movie=QtGui.QMovie("C:\\Users\\aryan\\Downloads\\percy2.gif")
+        self.ui.movie=QtGui.QMovie("C:\\Users\\aryan\\Downloads\\percy3.gif")
         self.ui.label.setMovie(self.ui.movie)
         self.ui.movie.start()
         startProgram.start()

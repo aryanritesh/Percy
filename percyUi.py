@@ -9,31 +9,41 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import iconify as ico
-
-
+# from tkinter import *
+# root=Tk()
+# root.title("Percy")
+# root.overrideredirect(True)
+# root.geometry("650x550")
+# def moveApp(e):
+#     root.geometry(f'+{e.x_root}+{e.y_root}')
 
 class Ui_Percy(object):
     def setupUi(self, Percy):
         Percy.setObjectName("Percy")
-        Percy.resize(850, 650)
+        Percy.resize(650, 550)
+        # titlebar=Frame(root,bg="black",relief="raised")
+        # titlebar.pack(expand=1,fill=X)
+        # titlebar.bind("<B1-Motion>", moveApp)
+        # titleLabel=Label(titlebar, text="  Percy",bg="black",fg='white')
+        # titleLabel.pack(side=LEFT,pady=6)
         self.centralwidget = QtWidgets.QWidget(Percy)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(0, 0, 850, 650))
+        self.label.setGeometry(QtCore.QRect(0, 0, 650, 551))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("C:\\Users\\aryan\\Downloads\\percy2.gif"))
+        self.label.setPixmap(QtGui.QPixmap("C:\\Users\\aryan\\Downloads\\percy3.gif"))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(750, 20, 60, 50))
-        #icon = ico.Icon('feather:mic')
-        #self.pushButton.setIcon(icon)
-        self.pushButton.setStyleSheet("background-image : url(mic2.png);")
-        self.pushButton.setText("Start")
-        #self.pushButton.setFont(Qfont('Times',20))
+        self.pushButton.setGeometry(QtCore.QRect(550,30, 71, 71))
+        self.pushButton.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("C:\\Users\\aryan\\Downloads\\mic2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton.setIcon(icon)
+        self.pushButton.setIconSize(QtCore.QSize(115, 115))
         self.pushButton.setObjectName("pushButton")
         Percy.setCentralWidget(self.centralwidget)
+
         self.retranslateUi(Percy)
         QtCore.QMetaObject.connectSlotsByName(Percy)
 
