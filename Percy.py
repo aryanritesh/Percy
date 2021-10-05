@@ -308,11 +308,11 @@ class mainT(QThread):
         elif "play music" in self.question or "music" in self.question or "songs" in self.question:
             speak("opening spotify")
             os.startfile("spotify.exe")
-        elif "sleep" in self.question or "stop listening" in self.question:
+        elif "disable" in self.question or "stop listening" in self.question:
             speak("Alright aryan, call me whenever you need me!")
             break;
         elif "terminate" in self.question or "shutdown" in self.question:
-            speak("Alright Aryan")
+            speak("Goodbye!")
             sys.exit()
 
         speak("Is there anything else I can assist you with?")
