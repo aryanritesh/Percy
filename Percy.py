@@ -17,7 +17,7 @@ import wikipedia
 import smtplib
 import geocoder
 from geopy.geocoders import Nominatim
-import pywikihow
+import speedtest
 from PyQt5.QtGui import QMovie
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -293,7 +293,25 @@ class mainT(QThread):
                         speak(howTo[0].summary)
                 except Exception as e:
                     speak("I am unable to find the answer to this one Aryan")
-        elif "no thanks" in self.question or "shutdown" in self.question:
+        elif "internet speed" in self.question or "what is our network speed" in self.question:
+            speak("Calculating, hold on")
+            sp=speedtest.Speedtest()
+            download=int(sp.download())
+            upload=int(sp.upload())
+            speak(f"Our uploading speed is {upload} bits per second and downloading speed is {download} bits per second")
+        elif "increase the volume" in self.question or "turn up the volume" in self.question:
+            pyautogui.press("volumeup")
+        elif "decrease the volume" in self.question or "turn down the volume" in self.question:
+            pyautogui.press("volumedown")
+        elif "mute" in self.question or "disable sound" in self.question:
+            pyautogui.press("volumemute") #say it twice to unmute
+        elif "play music" in self.question or "music" in self.question or "songs" in self.question:
+            speak("opening spotify")
+            os.startfile("spotify.exe")
+        elif "sleep" in self.question or "stop listening" in self.question:
+            speak("Alright aryan, call me whenever you need me!")
+            break;
+        elif "terminate" in self.question or "shutdown" in self.question:
             speak("Alright Aryan")
             sys.exit()
 
