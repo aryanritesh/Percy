@@ -1,3 +1,4 @@
+import operator
 import sys
 import ctypes
 import time
@@ -15,7 +16,7 @@ import wikipedia
 import smtplib
 import geocoder
 from geopy.geocoders import Nominatim
-from PyQt5 import QtWidgets,QtCore,QtGui
+import numpy
 from PyQt5.QtGui import QMovie
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -86,6 +87,7 @@ class mainT(QThread):
       r=sr.Recognizer()
       with sr.Microphone() as source :
        print("detecting")
+       #r.adjust_for_ambient_noise(source)
        r.pause_threshold=1
        audio=r.listen(source,timeout=2,phrase_time_limit=5)
 
@@ -173,7 +175,9 @@ class mainT(QThread):
             if "yes" in resp:
                 os.system("TASKKILL/F /IM msedge.exe")
             elif "no" in resp:
-                break;
+                speak("Okay sir")
+
+
         elif "dismiss word" in self.question or "close word" in self.question:
             speak("closing word")
             os.system("TASKKILL/F /IM WINWORD.exe")
@@ -206,7 +210,7 @@ class mainT(QThread):
                 pywhatkit.search("today's news")
             if "no" in ans:
                 speak("Okay sir")
-                break;
+
         elif "what is my location" in self.question or "where are we" in self.question:
           g= geocoder.ip('me')
           loc=g.latlng
@@ -220,6 +224,32 @@ class mainT(QThread):
             image=pyautogui.screenshot()
             image.save(f"{fileName}.png")
             speak("Done sir")
+        elif "calculate" in self.question:
+            r=sr.Recognizer()
+            with sr.Microphone() as source:
+              try:
+                speak("I am listening sir, tell me the numbers")
+                print("listening..")
+                r.adjust_for_ambient_noise(source)
+                audio=r.listen(source)
+                stringTerm=r.recognize_google(audio)
+
+              except Exception as e:
+               speak("Try again sir, I wasn't able to recognize that")
+
+            def operatorF(op):
+                return {
+                    '+' :operator.add, # say plus
+                    '-' :operator.sub, # say minus
+                    'X' :operator.mul, # say multiplied by
+                    'x':operator.mul, #say multiplied by
+                    '/' :operator.__truediv__, #say divided by
+                }[op]
+            def binaryC(op1,oper,op2):
+                op1,op2= float(op1), float(op2)
+                return operatorF(oper)(op1,op2)
+            speak("The answer is ")
+            speak(binaryC(*(stringTerm.split())))
 
         elif "no thanks" in self.question or "shutdown" in self.question:
             speak("Alright sir")
@@ -237,7 +267,7 @@ class Main(QMainWindow):
         button.setStyleSheet("background - image: url(mic2.png);")
         self.ui.pushButton.clicked.connect(self.startTask)
     def startTask(self):
-        self.ui.movie=QtGui.QMovie("C:\\Users\\aryan\\Downloads\\percy3.gif")
+        self.ui.movie=QtGui.QMovie("C:\\Users\\aryan\\Downloads\\percy.gif")
         self.ui.label.setMovie(self.ui.movie)
         self.ui.movie.start()
         startProgram.start()

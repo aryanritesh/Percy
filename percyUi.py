@@ -31,7 +31,7 @@ class Ui_Percy(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(0, 0, 650, 551))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("C:\\Users\\aryan\\Downloads\\percy3.gif"))
+        self.label.setPixmap(QtGui.QPixmap("C:\\Users\\aryan\\Downloads\\percy.gif"))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
