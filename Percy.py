@@ -144,9 +144,9 @@ class mainT(QThread):
             speak("gathering information, hold on")
             ip= get('http://api.ipify.org').text
             speak(f"Your Ip address is {ip}")
-        elif "search for" in self.question:
+        elif "wikipedia" in self.question: #"search for{xyz} on wikipedia"
             speak("Looking it up..")
-            self.question=self.question.replace("search for","")
+            self.question=self.question.replace("wikipedia","")
             results = wikipedia.summary(self.question,sentences=2)
             speak("According to wikipedia")
             speak(results)
@@ -334,7 +334,7 @@ class mainT(QThread):
                   chat_history_ids = model.generate(bot_input_ids, max_length=1000, pad_token_id=tokenizer.eos_token_id)
                   speak("{}".format(
                         tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)))
-        #speak("Is there anything else I can assist you with?")
+    #speak("Is there anything else I can assist you with?")
 
 startProgram=mainT()
 
