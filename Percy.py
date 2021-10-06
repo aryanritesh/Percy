@@ -27,6 +27,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PySide2.QtCore import *
 import python_weather
 import asyncio
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice',voices[2].id)
@@ -42,7 +44,7 @@ def takeRes(): #voice to text
   with sr.Microphone() as source :
    print("detecting")
    r.pause_threshold=1
-   audio=r.listen(source,timeout=2,phrase_time_limit=5)
+   audio=r.listen(source,timeout=2,phrase_time_limit=7)
 
    try:
      print("Recognizing..")
@@ -314,8 +316,25 @@ class mainT(QThread):
         elif "terminate" in self.question or "shutdown" in self.question:
             speak("Goodbye!")
             sys.exit()
-
-        speak("Is there anything else I can assist you with?")
+        elif "chat" in self.question:
+                  # speak("Let's vibe!")
+             speak("say the first sentence to initialize the bot")
+             while True:
+                micIn=takeRes()
+                if "stop" in micIn:
+                        speak("Alright, looking forward to chat with you soon")
+                        break;
+                else:
+                  step = 0
+                  tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
+                  model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-large")
+                  new_user_input_ids = tokenizer.encode(micIn + tokenizer.eos_token, return_tensors='pt')
+                  bot_input_ids = torch.cat([chat_history_ids, new_user_input_ids],
+                                              dim=-1) if step > 0 else new_user_input_ids
+                  chat_history_ids = model.generate(bot_input_ids, max_length=1000, pad_token_id=tokenizer.eos_token_id)
+                  speak("{}".format(
+                        tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)))
+        #speak("Is there anything else I can assist you with?")
 
 startProgram=mainT()
 
