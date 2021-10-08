@@ -25,8 +25,7 @@ from PyQt5.QtWidgets import *
 from percyUi import Ui_Percy
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PySide2.QtCore import *
-import python_weather
-import asyncio
+import datetime
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 engine = pyttsx3.init('sapi5')
@@ -67,7 +66,7 @@ def greet():
     elif hour>17 and hour<=20:
         speak("Good evening Aryan")
     elif hour>2 and hour<=4:
-        speak("Aryan you should consider sleeping")
+         speak("Aryan you should consider sleeping")
 
 
 # async def getWeather():
@@ -316,24 +315,29 @@ class mainT(QThread):
         elif "terminate" in self.question or "shutdown" in self.question:
             speak("Goodbye!")
             sys.exit()
-        elif "chat" in self.question:
-                  # speak("Let's vibe!")
-             speak("say the first sentence to initialize the bot")
-             while True:
-                micIn=takeRes()
-                if "stop" in micIn:
-                        speak("Alright, looking forward to chat with you soon")
-                        break;
-                else:
-                  step = 0
-                  tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
-                  model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-large")
-                  new_user_input_ids = tokenizer.encode(micIn + tokenizer.eos_token, return_tensors='pt')
-                  bot_input_ids = torch.cat([chat_history_ids, new_user_input_ids],
-                                              dim=-1) if step > 0 else new_user_input_ids
-                  chat_history_ids = model.generate(bot_input_ids, max_length=1000, pad_token_id=tokenizer.eos_token_id)
-                  speak("{}".format(
-                        tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)))
+        # elif "chat" in self.question:
+        #           # speak("Let's vibe!")
+        #      speak("say the first sentence to initialize the bot")
+        #      while True:
+        #         micIn=takeRes()
+        #         if "stop" in micIn:
+        #                 speak("Alright, looking forward to chat with you soon")
+        #                 break;
+        #         else:
+        #           step = 0
+        #           tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
+        #           model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-large")
+        #           new_user_input_ids = tokenizer.encode(micIn + tokenizer.eos_token, return_tensors='pt')
+        #           bot_input_ids = torch.cat([chat_history_ids, new_user_input_ids],
+        #                                       dim=-1) if step > 0 else new_user_input_ids
+        #           chat_history_ids = model.generate(bot_input_ids, max_length=1000, pad_token_id=tokenizer.eos_token_id)
+        #           speak("{}".format(
+        #                 tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)))
+        else:
+            from chat import talk
+            reply=talk(self.question)
+            speak(reply)
+
     #speak("Is there anything else I can assist you with?")
 
 startProgram=mainT()
