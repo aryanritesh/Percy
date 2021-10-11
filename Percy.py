@@ -28,6 +28,7 @@ from PySide2.QtCore import *
 import datetime
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
+from chat import *
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice',voices[2].id)
@@ -43,7 +44,7 @@ def takeRes(): #voice to text
   with sr.Microphone() as source :
    print("detecting")
    r.pause_threshold=1
-   audio=r.listen(source,timeout=2,phrase_time_limit=7)
+   audio=r.listen(source,timeout=2,phrase_time_limit=5)
 
    try:
      print("Recognizing..")
@@ -100,7 +101,7 @@ class mainT(QThread):
       with sr.Microphone() as source :
        print("detecting")
        #r.adjust_for_ambient_noise(source)
-       r.pause_threshold=1
+       r.pause_threshold=2
        audio=r.listen(source,timeout=2,phrase_time_limit=5)
 
        try:
@@ -145,10 +146,14 @@ class mainT(QThread):
             speak(f"Your Ip address is {ip}")
         elif "wikipedia" in self.question: #"search for{xyz} on wikipedia"
             speak("Looking it up..")
-            self.question=self.question.replace("wikipedia","")
-            results = wikipedia.summary(self.question,sentences=2)
-            speak("According to wikipedia")
-            speak(results)
+            try:
+                self.question=self.question.replace("wikipedia","")
+                results = wikipedia.summary(self.question,sentences=2)
+                speak("According to wikipedia")
+                speak(results)
+            except Exception as e:
+                speak("I am sorry, I could not find this")
+
         elif "youtube" in self.question:
     #webbrowser.open("youtube.com")
          speak("Which video do you want me to play ?")
@@ -261,19 +266,21 @@ class mainT(QThread):
             speak(binaryC(*(stringTerm.split())))
         elif "weather" in self.question:
             #myApi = os.environ.get('weather_api')
-            ApiLink="http://api.openweathermap.org/data/2.5/weather?q=Mumbai&appid=a9ecec8771619ca5613a738ea7767ec3"
+            ApiLink="http://api.openweathermap.org/data/2.5/weather?q=Mumbai&appid=a9ecec8771619ca5613a738ea7767ec3&units=metric"
             api_link=requests.get(ApiLink)
             api_data=api_link.json()
             if api_data['cod']=='404':
                 speak("The location seems to be wrong Aryan")
             else:
-                temp=int((api_data['main']['temp']) -273.15)
+                temp=api_data['main']['temp']
+                feelsLike=api_data['main']['feels_like']
                 weatherDes=api_data['weather'][0]['description']
                 humidity=api_data['main']['humidity']
                 windSpeed=api_data['wind']['speed']
                 # clouds=api_data['clouds']['all']
                 speak(f"The weather description is {weatherDes}")
                 speak(f"The temperature right now is {temp} degree celsius")
+                speak(f"But it feels like {feelsLike} degree celsius")
                 speak(f"The humidity right now is at {humidity} %")
                 speak(f"The wind speed is {windSpeed} kmph")
                 # speak(f"the clouds are {clouds}")
@@ -334,7 +341,6 @@ class mainT(QThread):
         #           speak("{}".format(
         #                 tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)))
         else:
-            from chat import talk
             reply=talk(self.question)
             speak(reply)
 

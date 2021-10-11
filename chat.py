@@ -1,15 +1,19 @@
 import  random
+import requests
+from bs4 import BeautifulSoup
 greeting= ["hii", "hello", "hey", "yo"]
 replyGreet=['heyya','hello', 'hey', 'yo', 'hiiii']
 condition=["how are you", "how are you doing"]
 replyCond=["I am fine, how are you?", "up and running, how about you?","young,wild and free, and you?"]
-thanks=("okay","alright","thank you","thanks")
+thanks=("nice","alright","thank you","thanks")
 replyThanks=('you are welcome','glad to help','happy to help')
+randomss=("good","fine","I am okay","nothing much","relaxing","tired","show me")
+replyR=('laalaaa','I understand that feeling..','maybe let us watch some youtube? ask me to open it','gloomy day eh','tell me to open it on youtube')
 capabilities=("what all can you do","what are your functions","what can you do","what all can you perform")
-replyCap= ('I can help you with a variety of things, try tell me the news', 'I can help you with a variety of things, try tell me the weather','I can help you with a variety of things, search for elon musk on wikipedia')
+replyCap= ('I can help you with a variety of things, try, tell me the news', 'I can help you with a variety of things, try, tell me the weather','I can help you with a variety of things, try, search for elon musk on wikipedia')
 WhoAreYou=("who are you","what are you")
 replyWay=('I am percy, a personal assistant to aryan', 'I am percy, a personal assistant')
-ssup=("what is up","ssup","what you doing")
+ssup=("what is up","ssup","what are you doing")
 replySsup=('just chillin, you?','surfing the net for cute puppy videos, you?','nothing much, you?')
 whoAmI=("who am I")
 replyWIA=('You are Aryan')
@@ -51,5 +55,16 @@ def talk(Text):
         elif word in bday:
             reply8=replybday
             return reply8
+        elif word in randomss:
+            reply9=random.choice(replyR)
+            return reply9
         else:
-            return random.choice(apology)
+            try:
+                search=requests.get("https://www.google.com/search?q="+word)
+                soup=BeautifulSoup(search.text,'html.parser')
+                print(soup.prettify())
+                #site=soup.find(class_='BNeawe s3v9rd AP7Wnd').get_text()
+                reply10=soup.find(class_='BNeawe s3v9rd AP7Wnd').get_text()
+                return reply10
+            except Exception as e:
+             return random.choice(apology)
