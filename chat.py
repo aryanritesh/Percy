@@ -62,7 +62,7 @@ def talk(Text):
             try:
                 search=requests.get("https://www.google.com/search?q="+word)
                 soup=BeautifulSoup(search.text,'html.parser')
-                print(soup.prettify())
+                #print(soup.prettify())
                 #site=soup.find(class_='BNeawe s3v9rd AP7Wnd').get_text()
                 reply10=soup.find(class_='BNeawe s3v9rd AP7Wnd').get_text()
                 return reply10
