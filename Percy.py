@@ -31,9 +31,9 @@ import torch
 from chat import *
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
-engine.setProperty('voice',voices[2].id)
+engine.setProperty('voice',voices[1].id)
 engine.setProperty('rate',170)
-print(voices[2].id)
+print(voices[1].id)
 def speak(audio):
  engine.say(audio)
  print(audio)
@@ -264,7 +264,7 @@ class mainT(QThread):
                 return operatorF(oper)(op1,op2)
             speak("The answer is ")
             speak(binaryC(*(stringTerm.split())))
-        elif "weather" in self.question:
+        elif "weather" in self.question or "temperature" in self.question:
             #myApi = os.environ.get('weather_api')
             ApiLink="http://api.openweathermap.org/data/2.5/weather?q=Mumbai&appid=a9ecec8771619ca5613a738ea7767ec3&units=metric"
             api_link=requests.get(ApiLink)
